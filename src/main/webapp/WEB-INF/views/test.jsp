@@ -14,18 +14,22 @@
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
-<!-- <meta name="viewport" content="width=device-width, initial-scale=1" /> -->
-<!-- <link rel="stylesheet" -->
-<!-- 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> -->
-<!-- <script -->
-<!-- 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
-<!-- <script -->
-<!-- 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
-<!-- <script -->
-<!-- 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
-<!-- <script src="./resources/js/postrequest.js"></script> -->
-<!-- <script src="./resources/js/getrequest.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="./resources/js/postrequest.js"></script>
+<script src="./resources/js/getrequest.js"></script>
+<!-- <script src="./resources/js/form.js"></script> -->
+<style>
+</style>
 </head>
 
 <body>
@@ -37,18 +41,18 @@
 					id="fileUploadForm">
 					<div class="form-group">
 						<label class="control-label">First Name:</label><input type="text"
-							name="fname" required="required" id="fname"> <label class="control-label">Last
-							Name:</label><input type="text" name="lname" id="lname"> <label
-							class="control-label" for="uploadfile">Upload File:</label> <input
-							type="file" class="form-control" id="uploadfile"
-							placeholder="Upload File" name="filename"></input>
+							name="fname" required="required" id="fname"> <label
+							class="control-label">Last Name:</label><input type="text"
+							name="lname" id="lname"> <label class="control-label"
+							for="uploadfile">Upload File:</label> <input type="file"
+							class="form-control" id="uploadfile" placeholder="Upload File"
+							name="filename"></input>
 					</div>
-
 					<button type="submit" class="btn btn-default" id="btnSubmit">Upload</button>
 					<button type="button" class="btn btn-default" id="btnGetFiles">Files</button>
 				</form>
-				<!-- 				<hr /> -->
-				<!-- 				<div id="listFiles"></div> -->
+				<hr />
+				<div id="listFiles"></div>
 			</div>
 		</div>
 	</div>

@@ -3,118 +3,155 @@
 <%@ page isELIgnored="false"%>
 <html>
 <head>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script>
-	var totalFileLength, totalUploaded, fileCount, filesUploaded;
-
-	//To log everything on console
-	function debug(s) {
-		var debug = document.getElementById('debug');
-		if (debug) {
-			debug.innerHTML = debug.innerHTML + '<br/>' + s;
-		}
-	}
-
-	//Will be called when upload is completed
-	function onUploadComplete(e) {
-		totalUploaded += document.getElementById('files').files[filesUploaded].size;
-		filesUploaded++;
-		debug('complete ' + filesUploaded + " of " + fileCount);
-		debug('totalUploaded: ' + totalUploaded);
-		if (filesUploaded < fileCount) {
-			uploadNext();
-		} else {
-			var bar = document.getElementById('bar');
-			bar.style.width = '100%';
-			bar.innerHTML = '100% complete';
-			alert('Finished uploading file(s)');
-		}
-	}
-
-	//Will be called when user select the files in file control
-	function onFileSelect(e) {
-		var files = e.target.files; // FileList object
-		var output = [];
-		fileCount = files.length;
-		totalFileLength = 0;
-		for (var i = 0; i < fileCount; i++) {
-			var file = files[i];
-			output.push(file.name, ' (', file.size, ' bytes, ',
-					file.lastModifiedDate.toLocaleDateString(), ')');
-			output.push('<br/>');
-			debug('add ' + file.size);
-			totalFileLength += file.size;
-		}
-		document.getElementById('selectedFiles').innerHTML = output.join('');
-		debug('totalFileLength:' + totalFileLength);
-	}
-
-	//This will continueously update the progress bar
-	function onUploadProgress(e) {
-		if (e.lengthComputable) {
-			var percentComplete = parseInt((e.loaded + totalUploaded) * 100
-					/ totalFileLength);
-			var bar = document.getElementById('bar');
-			bar.style.width = percentComplete + '%';
-			bar.innerHTML = percentComplete + ' % complete';
-		} else {
-			debug('unable to compute');
-		}
-	}
-
-	//the Ouchhh !! moments will be captured here
-	function onUploadFailed(e) {
-		alert("Error uploading file");
-	}
-
-	//Pick the next file in queue and upload it to remote server
-	function uploadNext() {
-		var xhr = new XMLHttpRequest();
-		console.log("called ")
-		var fd = new FormData();
-		var file = document.getElementById('files').files[filesUploaded];
-		console.log("file: "+file)
-		fd.append("multipartFile", file);
-		console.log("file: "+fd)
-		xhr.upload.addEventListener("progress", onUploadProgress, false);
-		xhr.addEventListener("load", onUploadComplete, false);
-		xhr.addEventListener("error", onUploadFailed, false);
-		xhr.open("POST", "save-product");
-		debug('uploading ' + file.name);
-		xhr.send(fd);
-	}
-
-	//Let's begin the upload process
-	function startUpload() {
-		totalUploaded = filesUploaded = 0;
-		uploadNext();
-	}
-
-	//Event listeners for button clicks
-	window.onload = function() {
-		document.getElementById('files').addEventListener('change',
-				onFileSelect, false);
-		document.getElementById('uploadButton').addEventListener('click',
-				startUpload, false);
-	}
-</script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- <link rel="stylesheet" -->
+<!-- 	href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css"> -->
+<!-- <script -->
+<!-- 	src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+<!-- <script type="text/javascript" src="./resources/js/sweetalert.js"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.0/sweetalert2.all.min.js"></script>
+<!-- <link href="./resources/js/sweetalert.css" rel="stylesheet" /> -->
+<link href="./resources/js/sweet.css" rel="stylesheet" />
 </head>
+<style> 
+  body { 
+	background-color: aliceblue;
+	font-family: Times New Roman", Georgia, serif;
+	text-align: center;
+}
+p,button,h2 {
+  font-family: "Times New Roman", Times, serif;
+}
+/* 
+ button { 
+ 	background-color: cadetblue; 
+ 	color: whitesmoke; 
+ 	border: 0; 
+ 	-webkit-box-shadow: none; 
+ 	box-shadow: none; 
+ 	font-size: 18px; 
+ 	font-weight: 500; 
+ 	border-radius: 7px; 
+ 	padding: 15px 35px; 
+ 	cursor: pointer; 
+ 	white-space: nowrap; 
+ 	margin: 10px; 
+ } 
+
+img {
+	width: 200px;
+}
+
+input[type="text"] {
+	padding: 12px 20px;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	box-sizing: border-box;
+}
+
+h1 {
+	border-bottom: solid 2px grey;
+}
+
+#success {
+	background: green;
+}
+
+#error {
+	background: red;
+}
+
+#warning {
+	background: coral;
+}
+
+#info {
+	background: cornflowerblue;
+}
+
+#question {
+	background: grey;
+} */
+</style>
 <body>
-	<div style="width: 55%">
-		<h1>HTML5 Ajax Multi-file Upload With Progress Bar</h1>
-		<div id='progressBar'
-			style='height: 20px; border: 2px solid green; margin-bottom: 20px'>
-			<div id='bar' style='height: 100%; background: #33dd33; width: 0%'>
-			</div>
-		</div>
-		<form style="margin-bottom: 20px">
-			<input type="file" id="files" multiple style="margin-bottom: 20px" /><br />
-			<output id="selectedFiles"></output>
-			<input id="uploadButton" type="button" value="Upload"
-				style="margin-top: 20px" />
-		</form>
-		<div id='debug'
-			style='height: 100px; border: 2px solid #ccc; overflow: auto'></div>
-	</div>
+<div class="container">
+	<button class="btn btn-primary" id="success">Success</button>
+	<button class="btn btn-primary" id="try1">Try Ajax</button>
+	<button class="btn btn-primary" id="try2">Custom Position</button>
+		<button class="btn btn-primary" id="try3">Corner Position</button>
+			<button class="btn btn-primary" id="try4" onclick="call('Hello')">Message</button>
+</div>	 
+<script type="text/javascript">
+$(document).on('click', '#success', function(e) {
+	swal({
+		  title: "Sweet!",
+		  text: "Here's a custom image.",
+		  imageUrl: 'https://lipis.github.io/bootstrap-sweetalert/assets/thumbs-up.jpg'
+		});
+			
+});
+
+$(document).on('click','#try1',function(e){
+	swal({
+		  title: "Are you sure?",
+		  text: "You will not be able to recover this imaginary file!",
+		  type: "warning",
+		  html: 'You can use <b>bold text</b>, ' +
+			    '<a href="//sweetalert2.github.io">links</a> ' +
+			    'and other HTML tags',
+		  showCancelButton: true,
+		  confirmButtonClass: "btn-danger",
+		  confirmButtonText: "Yes, delete it!",
+		  cancelButtonText: "No, cancel plx!",
+		  closeOnConfirm: false,
+		  closeOnCancel: false
+		},
+		function(isConfirm) {
+		  if (isConfirm) {
+		    swal("Deleted!", "Your imaginary file has been deleted.", "success");
+		  } else {
+		    swal("Cancelled", "Your imaginary file is safe :)", "error");
+		  }
+		});
+});
+
+$(document).on('click','#try2',function(e){
+	swal({
+// 		  position: 'top-end',
+// 		  type: 'success',
+// 		  title: 'Your work has been saved',
+// 		  showConfirmButton: false,
+// 		  timer: 1500
+		 	title: "Some Title",
+		 	 html: "<a href='#' style='color:blue;font-style: italic;'>Some Html</a>",
+		    width: '800px'
+		})
+});
+
+$(document).on('click','#try3',function(e){
+	swal({
+			position: 'top-end',
+			  type: 'success',
+		  title: 'Your work has been saved',
+		  showConfirmButton: false,
+		  timer: 1500
+		})
+});
+
+function call(val){
+// 	alert(val)
+	swal({
+	  position: 'top-end',
+	  type: 'success',
+	  title: val,
+	  showConfirmButton: false,
+	  timer: 1500
+	})
+}
+
+</script>
 </body>
 </html>

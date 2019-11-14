@@ -33,7 +33,13 @@ public class HomeController {
 	public String view() {
 		logger.info("View method called");
 		System.out.println("testing");
-		return "test";
+		return "list";
+	}
+	
+	@GetMapping("/alert")
+	public String alert() {
+		System.out.println("alert");
+		return "index";
 	}
 
 	@PostMapping(value = "/fileUpload")

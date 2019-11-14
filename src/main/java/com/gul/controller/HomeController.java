@@ -14,8 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -31,22 +33,30 @@ public class HomeController {
 	public String view() {
 		logger.info("View method called");
 		System.out.println("testing");
-		return "home";
+		return "test";
+	}
+
+	@PostMapping(value = "/fileUpload")
+	@ResponseBody
+	public String fileUpload(@RequestParam("filename") MultipartFile file,@RequestParam("fname") String fname,@RequestParam("lname") String lname) {
+		System.out.println(">>>>>>>>"+fname+": "+lname);
+		System.out.println(">>>>>>>>"+file.getOriginalFilename());
+		return "success";
 	}
 
 	@ResponseBody
-	  @RequestMapping(value = "submitFiles", method = RequestMethod.POST)
-	  public String submitPapers(MultipartHttpServletRequest request) {
-	    List < MultipartFile > papers = request.getFiles("papers");
-	    try {
-	      saveFilesToServer(papers);
-	    } catch (Exception e) {
-	      return "error";
-	    }
-	    return "success";
-	  }
+	@RequestMapping(value = "submitFiles", method = RequestMethod.POST)
+	public String submitPapers(MultipartHttpServletRequest request) {
+		List<MultipartFile> papers = request.getFiles("papers");
+		try {
+			saveFilesToServer(papers);
+		} catch (Exception e) {
+			return "error";
+		}
+		return "success";
+	}
 
-	  public void saveFilesToServer(List<MultipartFile> multipartFiles) throws IOException {
+	public void saveFilesToServer(List<MultipartFile> multipartFiles) throws IOException {
 //	  	String directory = "/home/user/uploadedFilesDir/";
 		String directory = "D:/Upload/SingleFileUpload/";
 		File file = new File(directory);
@@ -55,8 +65,8 @@ public class HomeController {
 			file = new File(directory + multipartFile.getOriginalFilename());
 			IOUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));
 		}
-	  }
-	  
+	}
+
 	@RequestMapping("/save-product")
 	public void saveFile(HttpServletRequest request, @ModelAttribute UploadedFile uploadedFile,
 			BindingResult bindingResult, Model model) {
